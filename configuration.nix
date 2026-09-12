@@ -70,7 +70,6 @@
     casks = [
       "wezterm"
       "claude-code"
-      "aerial"  # cinematic Apple-TV aerial screensavers + wallpapers, free and open source
     ];
   };
 }
