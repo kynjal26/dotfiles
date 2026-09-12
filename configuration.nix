@@ -65,6 +65,7 @@
     onActivation.extraFlags = [ "--force" ];
     brews = [
       "herdr"
+      "treehouse"  # pre-warmed git worktree pool for parallel AI agents
     ];
     casks = [
       "wezterm"
