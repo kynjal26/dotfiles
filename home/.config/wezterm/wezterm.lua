@@ -2,7 +2,22 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
-config.color_scheme = "rose-pine-moon"
+config.color_schemes = {
+  ['Monokai Pro'] = {
+    foreground = '#fcfcfa',
+    background = '#221f22',
+    cursor_bg = '#fcfcfa',
+    cursor_fg = '#221f22',
+    cursor_border = '#fcfcfa',
+    selection_fg = '#fcfcfa',
+    selection_bg = '#403e41',
+    scrollbar_thumb = '#5b595c',
+    split = '#403e41',
+    ansi = { '#221f22', '#ff6188', '#a9dc76', '#ffd866', '#fc9867', '#ab9df2', '#78dce8', '#fcfcfa' },
+    brights = { '#5b595c', '#ff6188', '#a9dc76', '#ffd866', '#fc9867', '#ab9df2', '#78dce8', '#f9f8f5' },
+  },
+}
+config.color_scheme = 'Monokai Pro'
 config.font = wezterm.font("Hack Nerd Font")
 config.font_size = 15.0
 config.window_background_opacity = 0.8

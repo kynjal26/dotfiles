@@ -23,12 +23,12 @@ If you find a bug, please open a GitHub Issue using the bug report template.
 
 Running the switch builds:
 
-- System settings (dark mode, key repeat, dock, Finder, trackpad)
+- System settings (dark mode, key repeat without press-and-hold, full keyboard dialogs, expanded save/print, dock, Finder path and status bars, 24h clock with seconds, screenshots to Pictures/Screenshots, trackpad tap and two-finger click, Touch ID for sudo, screensaver password immediately, app firewall)
 - Homebrew apps (casks and CLI tools)
-- Nix user packages (ripgrep, fd, fzf, jq, lazygit, Neovim, Hack Nerd Font)
-- Shell (zsh, aliases, starship prompt)
-- Editor (Neovim config with the rose-pine moon theme)
-- Terminal (WezTerm config with the rose-pine moon theme and dimmed unfocused windows)
+- Nix user packages (ripgrep, fd, fzf, jq, lazygit, Neovim, Node.js for the opt-in Pi npm install, Hack Nerd Font)
+- Shell (zsh with autosuggestions, syntax highlighting, fzf fuzzy finding, zoxide smart cd, eza listings, bat previews, starship prompt)
+- Editor (Neovim config with the Monokai Pro theme)
+- Terminal (WezTerm config with the Monokai Pro theme and dimmed unfocused windows)
 - Agent configs (Claude, Codex, opencode all share one AGENTS.md)
 - Optional Pi theme and local extensions, generic UI settings and model overrides, plus two deliberately pinned third-party Pi packages
 
@@ -37,6 +37,7 @@ Running the switch builds:
 - Apple Silicon Mac, by default.
 - Intel Mac: change one line.
   In `configuration.nix`, set `nixpkgs.hostPlatform = "x86_64-darwin";` (the comment right there tells you the same thing).
+- Admin user, Xcode Command Line Tools (`bootstrap.sh` checks), FileVault on (warns if off), and latest macOS updates installed.
 
 ## Fresh-machine setup
 
@@ -55,13 +56,15 @@ Change the host label or CPU architecture if needed, and read the Homebrew clean
 ./bootstrap.sh
 ```
 
-`bootstrap.sh` does four things, in order:
+`bootstrap.sh` does six things, in order:
 
-1. Installs Determinate Nix, if it isn't already installed.
-2. Symlinks this repo to `~/.dotfiles`.
+1. Checks fresh-Mac prerequisites (Xcode tools present, FileVault status).
+2. Installs Determinate Nix, if it isn't already installed.
+3. Symlinks this repo to `~/.dotfiles`.
    This has to happen before the first build, because `home.nix` points at config files through `~/.dotfiles`.
-3. Checks the `user` configured in `flake.nix` against your actual macOS username, and offers to fix it for you if they differ.
-4. Runs the first `darwin-rebuild switch`.
+4. Checks the `user` configured in `flake.nix` against your actual macOS username, and offers to fix it for you if they differ.
+5. Shows the plan (user, host, anything Homebrew `zap` will remove) and asks you to confirm.
+6. Runs the first `darwin-rebuild switch`.
    It fetches the `darwin-rebuild` tool from the nix-darwin 26.05 release branch, then applies this repo's locked flake config.
 
 After that, `darwin-rebuild` exists and you're on the normal workflow below.
@@ -99,19 +102,17 @@ If you clone it, review these before you run `bootstrap.sh`:
   All three have to match.
 - **CPU architecture**, `hostPlatform` in `configuration.nix` (see Prerequisites above).
 
-**Git identity:** this config deliberately does not set your git name or email.
-Git will stop your first commit and tell you to set them (`git config --global user.name "Your Name"` and `git config --global user.email you@example.com`).
-If you'd rather manage that declaratively, add this back to `home.nix` with your own identity:
+**Git identity (two GitHub accounts, HTTPS, no SSH):** `home.nix` declares this via `programs.git`.
+kynjal26 (with its noreply email) is the fallback everywhere; anything under `~/work/` switches commits and keychain credentials to KingJune28.
+Emails are per-account `users.noreply.github.com` addresses so commits link to the right profile without exposing real emails.
+After the first switch, store one token per account (they stay in your macOS keychain, never in this repo):
 
-```nix
-programs.git = {
-  enable = true;
-  settings.user = {
-    name = "Your Name";
-    email = "you@example.com";
-  };
-};
+```sh
+gh auth login   # repeat for the second account, then `gh auth switch --user <name>` picks the active one for `gh` commands
 ```
+
+On github.com/settings/emails for both accounts, keep "Keep my email addresses private" on and consider "Block command line pushes that expose my email" as a safety net.
+If you prefer one account or real emails, edit the `programs.git` block in `home.nix`.
 
 **Homebrew cleanup warning:** `configuration.nix` sets `homebrew.onActivation.cleanup = "zap"`.
 That means every time you switch, Homebrew removes any package or cask on your machine that isn't listed in the `brews` and `casks` arrays in `configuration.nix`.
@@ -159,7 +160,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 brew install --cask kunchenguid/tap/pi-launcher
 ```
 
-Home Manager owns exactly two repository-authored Pi directories: `~/.pi/agent/themes` and `~/.pi/agent/extensions`. It also links `models.json` and `settings.json` as individual files. The local extension directory is for public, repository-authored extensions only - third-party package code never belongs there. Run `/reload` after editing a local extension or other Pi resources. The terminal-title extension shows a spinner while Pi is working, then a completion mark with the session name or current directory. The `rose-pine-moon` theme was authored clean-room from the public [Rosé Pine Moon palette](https://rosepinetheme.com/palette) and Pi's [public theme schema](https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json), not from a private or live theme file.
+Home Manager owns exactly two repository-authored Pi directories: `~/.pi/agent/themes` and `~/.pi/agent/extensions`. It also links `models.json` and `settings.json` as individual files. The local extension directory is for public, repository-authored extensions only - third-party package code never belongs there. Run `/reload` after editing a local extension or other Pi resources. The terminal-title extension shows a spinner while Pi is working, then a completion mark with the session name or current directory. The `monokai-pro` theme was matched to the Monokai Pro palette published by the open MIT-licensed [monokai-pro.nvim](https://github.com/loctvl842/monokai-pro.nvim) port and Pi's [public theme schema](https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json).
 
 ### Pi Calm
 
@@ -184,7 +185,7 @@ Home Manager deliberately does not manage `~/.pi/agent` itself, or Pi authentica
 
 The first time you launch `nvim`, it bootstraps [lazy.nvim](https://github.com/folke/lazy.nvim) by cloning plugins from GitHub.
 That needs network access once; after that it's offline.
-Neovim and WezTerm both use the rose-pine moon theme.
+Neovim and WezTerm both use the Monokai Pro theme.
 Neovim keeps italics off and uses a transparent background on macOS, Windows, and WSL so it matches the terminal setup.
 
 ## License

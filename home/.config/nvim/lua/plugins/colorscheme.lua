@@ -1,27 +1,31 @@
 return {
   {
-    'rose-pine/neovim',
+    'loctvl842/monokai-pro.nvim',
     lazy = false,
     priority = 1000,
-    name = 'rose-pine',
+    name = 'monokai-pro',
     config = function()
-      require('rose-pine').setup({
-        dark_variant = 'moon',
-        dim_inactive_windows = false,
-        extend_background_behind_borders = false,
+      require('monokai-pro').setup({
+        filter = 'pro', -- classic | octagon | pro | machine | ristretto | spectrum
+        transparent_background = vim.uv.os_uname().sysname == 'Darwin'
+          or string.find(vim.uv.os_uname().sysname, 'Windows') ~= nil
+          or string.find(vim.uv.os_uname().release, 'WSL') ~= nil,
         styles = {
-          italic = false,
-          transparency = vim.uv.os_uname().sysname == 'Darwin'
-            or string.find(vim.uv.os_uname().sysname, 'Windows') ~= nil
-            or string.find(vim.uv.os_uname().release, 'WSL') ~= nil,
+          comment = { italic = false },
+          keyword = { italic = false },
+          type = { italic = false },
+          storageclass = { italic = false },
+          structure = { italic = false },
+          parameter = { italic = false },
+          annotation = { italic = false },
+          tag_attribute = { italic = false },
         },
       })
 
-      vim.cmd('colorscheme rose-pine')
+      vim.cmd('colorscheme monokai-pro')
 
       -- Make the dimmed directory path in the Snacks picker readable
-      local palette = require('rose-pine.palette')
-      vim.api.nvim_set_hl(0, 'SnacksPickerDir', { fg = palette.subtle })
+      vim.api.nvim_set_hl(0, 'SnacksPickerDir', { fg = '#939293' })
     end,
   },
 }

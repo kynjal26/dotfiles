@@ -18,7 +18,7 @@
     let
       # The one username line to change if this isn't your machine.
       # bootstrap.sh offers to rewrite this for you if your macOS username differs.
-      user = "kunchen";
+      user = "kyngjune";
     in
     {
       darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
@@ -30,6 +30,9 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            # Used Macs already have dotfiles where Home Manager writes;
+            # back them up instead of failing the switch.
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit user; };
             home-manager.users.${user} = import ./home.nix;
           }
