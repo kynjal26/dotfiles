@@ -70,6 +70,7 @@
     casks = [
       "wezterm"
       "claude-code"
+      "wallspace"  # live wallpapers, native Swift, free tier with no login
     ];
   };
 }
