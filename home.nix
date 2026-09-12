@@ -31,6 +31,23 @@ in
   home.sessionVariables.NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
   home.sessionPath = [ "${config.home.homeDirectory}/.npm-global/bin" ];
 
+  # Fully automatic worktree hygiene: treehouse itself never deletes
+  # anything unasked (no daemon, no TTL; destructive commands are
+  # dry-run by default), so this nightly job runs the one operation
+  # that is provably safe - pruning idle, clean, merged pools.
+  # Anything leased, dirty, unmerged, or in use is always left alone,
+  # including when the Mac is offline. Log kept for curiosity.
+  launchd.agents.treehouse-prune = {
+    enable = true;
+    config = {
+      ProgramArguments = [ "/opt/homebrew/bin/treehouse" "prune" "--all" "--yes" ];
+      StartCalendarInterval = { Hour = 4; Minute = 0; };
+      RunAtLoad = true;
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/treehouse-prune.log";
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/treehouse-prune.err";
+    };
+  };
+
   # Fuzzy finding and smart navigation, all in Monokai Pro to match
   # WezTerm, Neovim, and Pi. Ctrl-T finds files, Alt-C jumps into a
   # folder, Ctrl-R searches history, `z` jumps to frecent dirs.

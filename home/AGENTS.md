@@ -13,6 +13,7 @@
 - Apply that same high standard to engineering excellence: lint, test failures, and test flakiness.
   If you see one, even if it is not caused by what you are working on right now, still get it fixed.
 - Before using "dynamic workflows", "ultra code" or any harness feature that immediately spawns a large swarm of subagents, always explain the tradeoffs and ask the user for explicit approval.
+- When work splits into parallel independent streams (or risky experiments you may discard), isolate each in its own worktree with `treehouse get --lease --json` instead of piling branches onto the working checkout. Work in the returned path, return it with `treehouse return <path>` when done, and never touch another lease. Never prune or destroy pools or worktrees; a nightly job already reclaims provably-idle pools and leaves everything else alone. For ordinary single-track work, stay in place.
 
 ## Maintaining this file
 
