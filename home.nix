@@ -29,7 +29,18 @@ in
   # Nix store is read-only, so npm -g needs a user-owned prefix;
   # this makes README's opt-in Pi install work with Nix-provided npm.
   home.sessionVariables.NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
-  home.sessionPath = [ "${config.home.homeDirectory}/.npm-global/bin" ];
+  # Every standard user-install location on PATH, so anything you
+  # install (npm -g, go install, cargo install, pipx, manual binaries,
+  # opencode) just runs with no per-tool PATH fiddling. Verified with
+  # a clean-login-shell PATH trace; entries missing before this fix:
+  # .local/bin (omp lived here, invisible), go/bin, .cargo/bin.
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.npm-global/bin"
+    "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/go/bin"
+    "${config.home.homeDirectory}/.cargo/bin"
+    "${config.home.homeDirectory}/.opencode/bin"
+  ];
 
   # Fully automatic worktree hygiene: treehouse itself never deletes
   # anything unasked (no daemon, no TTL; destructive commands are
