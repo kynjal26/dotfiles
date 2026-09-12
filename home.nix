@@ -182,6 +182,6 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/researcher.toml";
   home.file.".codex/agents/reviewer.toml".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/reviewer.toml";
-  home.file.".agents/skills/astra-orchestrator".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/astra-orchestrator";
+  home.file.".agents/skills/sol-orchestrator".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/sol-orchestrator";
 }

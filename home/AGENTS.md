@@ -17,7 +17,7 @@
 
 ## Codex orchestration
 
-For complex coding tasks, use the `astra-orchestrator` skill when its trigger conditions match.
+For complex coding tasks, use the `sol-orchestrator` skill when its trigger conditions match.
 
 The root agent owns architecture, decomposition, integration, and final verification.
 Prefer specialized subagents for bounded exploration, implementation, testing, review, and technical research.
