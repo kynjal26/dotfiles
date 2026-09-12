@@ -169,4 +169,19 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
   home.file.".config/opencode/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
+
+  # Global Codex orchestration. Manage individual role files so other agents
+  # and Codex runtime state can coexist in the same directories.
+  home.file.".codex/agents/explorer.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/explorer.toml";
+  home.file.".codex/agents/worker.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/worker.toml";
+  home.file.".codex/agents/tester.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/tester.toml";
+  home.file.".codex/agents/researcher.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/researcher.toml";
+  home.file.".codex/agents/reviewer.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/agents/reviewer.toml";
+  home.file.".agents/skills/astra-orchestrator".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/astra-orchestrator";
 }

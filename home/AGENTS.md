@@ -15,6 +15,17 @@
 - Before using "dynamic workflows", "ultra code" or any harness feature that immediately spawns a large swarm of subagents, always explain the tradeoffs and ask the user for explicit approval.
 - When work splits into parallel independent streams (or risky experiments you may discard), isolate each in its own worktree with `treehouse get --lease --json` instead of piling branches onto the working checkout. Work in the returned path, return it with `treehouse return <path>` when done, and never touch another lease. Never prune or destroy pools or worktrees; a nightly job already reclaims provably-idle pools and leaves everything else alone. For ordinary single-track work, stay in place.
 
+## Codex orchestration
+
+For complex coding tasks, use the `astra-orchestrator` skill when its trigger conditions match.
+
+The root agent owns architecture, decomposition, integration, and final verification.
+Prefer specialized subagents for bounded exploration, implementation, testing, review, and technical research.
+
+Do not delegate trivial work merely for parallelism.
+Do not let multiple implementation agents edit the same files without explicit ownership boundaries.
+User instructions always take precedence over this orchestration policy.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
