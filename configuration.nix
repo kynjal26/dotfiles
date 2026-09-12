@@ -72,6 +72,7 @@
       "claude-code"
       "wallspace"  # live wallpapers, native Swift, free tier with no login
       "xnapper"    # beautiful screenshots; free tier stamps a watermark
+      "google-chrome"  # best DevTools + official iCloud Passwords extension + iCloud Keychain passkeys
     ];
   };
 }
